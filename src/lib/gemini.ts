@@ -55,14 +55,18 @@ export async function askGemini(input: { question?: string; audio?: { base64: st
       throw error;
     }
     const provider = error && typeof error === 'object' ? error as { status?: unknown; code?: unknown; name?: unknown } : {};
-    console.error('Gemini provider error', {
+    const details = {
       model,
       status: typeof provider.status === 'number' ? provider.status : null,
       code: typeof provider.code === 'number' || typeof provider.code === 'string' ? provider.code : null,
       name: typeof provider.name === 'string' ? provider.name : null
-    });
+    };
     const status = typeof provider.status === 'number' ? provider.status : null;
-    if (index < models.length - 1 && (status === 404 || (status !== null && status >= 500) || provider.name === 'AbortError' || provider.name === 'TimeoutError')) continue;
+    if (index < models.length - 1 && (status === 404 || (status !== null && status >= 500) || provider.name === 'AbortError' || provider.name === 'TimeoutError')) {
+      console.warn('Gemini model fallback', details);
+      continue;
+    }
+    console.error('Gemini provider error', details);
     throw new AIServiceError('provider_error');
     }
   }
