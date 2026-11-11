@@ -26,7 +26,7 @@ export async function askGemini(input: { question?: string; audio?: { base64: st
     : `Put the visitor's question in the JSON question field and answer it in the JSON answer field.\n${context}\nVisitor question: ${input.question}`;
   try {
     const response = await ai.models.generateContent({
-      model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+      model: process.env.GEMINI_MODEL || 'gemini-3.8-flash',
       contents: [{ role: 'user', parts: [
         { text: instruction },
         ...(input.audio ? [{ inlineData: { data: input.audio.base64, mimeType: input.audio.mimeType } }] : [])
@@ -36,7 +36,7 @@ export async function askGemini(input: { question?: string; audio?: { base64: st
         responseMimeType: 'application/json',
         responseSchema,
         temperature: 0.6,
-        maxOutputTokens: 600
+        maxOutputTokens: 1200
       }
     });
     const raw = response.text;
