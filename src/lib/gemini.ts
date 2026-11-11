@@ -45,7 +45,16 @@ export async function askGemini(input: { question?: string; audio?: { base64: st
     if (!parsed.success) throw new AIServiceError('invalid_response');
     return parsed.data;
   } catch (error) {
-    if (error instanceof AIServiceError) throw error;
+    if (error instanceof AIServiceError) {
+      console.error('Gemini response error', error.message);
+      throw error;
+    }
+    const provider = error && typeof error === 'object' ? error as { status?: unknown; code?: unknown; name?: unknown } : {};
+    console.error('Gemini provider error', {
+      status: typeof provider.status === 'number' ? provider.status : null,
+      code: typeof provider.code === 'number' || typeof provider.code === 'string' ? provider.code : null,
+      name: typeof provider.name === 'string' ? provider.name : null
+    });
     throw new AIServiceError('provider_error');
   }
 }
