@@ -27,7 +27,7 @@ Set `GEMINI_API_KEY` in `.env.local` to your own server-side Gemini API key, the
 npm run dev
 ```
 
-Open `http://localhost:3000`. The key is never requested from visitors or sent to the browser. `GEMINI_MODEL` defaults to `gemini-3.8-flash` and can be changed to an accessible audio-capable model.
+Open `http://localhost:3000`. The key is never requested from visitors or sent to the browser. `GEMINI_MODEL` defaults to `gemini-3.5-flash-lite`, with `gemini-3.6-flash` as a fallback for temporary provider failures. The model can be changed to an accessible audio-capable model.
 
 ## Tests and verification
 
